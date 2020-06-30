@@ -59,7 +59,8 @@ namespace XamarinSnippets
             object sender,
             EventArgs eventArgs)
         {
-            OnBindingContextChanged();
+            base.OnBindingContextChanged();
+            BindingContext = AssociatedObject.BindingContext;
         }
     }
 }

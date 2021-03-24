@@ -171,11 +171,24 @@ namespace XamarinSnippets
             }
 
 
-            var parameter = Converter.Convert(
-                CommandParameter ?? eventArgs,
-                typeof(object),
-                null,
-                CultureInfo.DefaultThreadCurrentUICulture);
+            object parameter;
+
+            if (CommandParameter != null)
+            {
+                parameter = CommandParameter;
+            }
+            else if (Converter != null)
+            {
+                parameter = Converter.Convert(
+                    eventArgs, 
+                    typeof(object), 
+                    null, 
+                    null);
+            }
+            else
+            {
+                parameter = eventArgs;
+            }
 
 
             if (Command.CanExecute(

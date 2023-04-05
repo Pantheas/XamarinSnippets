@@ -1,3 +1,7 @@
+using DID.Infrastructure.Extensions;
+
+using System.Collections;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 
@@ -16,55 +20,151 @@ namespace XamarinSnippets.Controls
     public class IndicatorView :
         StackLayout
     {
-        private CarouselView carouselView;
+        public static readonly BindableProperty ItemsSourceProperty =
+            BindableProperty.Create(
+                nameof(ItemsSource),
+                typeof(IEnumerable),
+                typeof(IndicatorView),
+                propertyChanged: OnItemsSourceChanged);
 
-
-        public Color IndicatorColor { get; set; }
-        public int IndicatorSize { get; set; } = 4;
-        public IndicatorShape IndicatorShape { get; set; } = IndicatorShape.Circle;
-
-        public Color SelectedIndicatorColor { get; set; }
-        public int SelectedIndicatorSize { get; set; } = 8;
-
-
-        protected override void OnParentSet()
+        public IEnumerable ItemsSource
         {
-            base.OnParentSet();
-
-
-            var element = (Parent as Layout<View>)?.Children
-                .FirstOrDefault(child => child.GetType() == typeof(CarouselView));
-
-            if (!(element is CarouselView carousel))
-            {
-                return;
-            }
-
-
-            carouselView = carousel;
-
-            carouselView.PositionChanged += OnCarouselPositionChanged;
-            carouselView.PropertyChanged += OnCarouselPropertyChanged;
+            get => (IEnumerable)GetValue(ItemsSourceProperty);
+            set => SetValue(ItemsSourceProperty, value);
         }
+
+
+
+        public static readonly BindableProperty SelectedItemProperty =
+            BindableProperty.Create(
+                nameof(SelectedItem),
+                typeof(object),
+                typeof(IndicatorView),
+                defaultBindingMode: BindingMode.OneWay,
+                propertyChanged: OnSelectedItemChanged);
+
+        public object SelectedItem
+        {
+            get => GetValue(SelectedItemProperty);
+            set => SetValue(SelectedItemProperty, value);
+        }
+
+
+
+        public static readonly BindableProperty IndicatorColorProperty =
+            BindableProperty.Create(
+                nameof(IndicatorColor),
+                typeof(Color),
+                typeof(IndicatorView),
+                defaultValue: Color.Default);
+
+        public Color IndicatorColor
+        {
+            get => (Color)GetValue(IndicatorColorProperty);
+            set => SetValue(IndicatorColorProperty, value);
+        }
+
+
+        public static readonly BindableProperty IndicatorWidthProperty =
+            BindableProperty.Create(
+                nameof(IndicatorWidth),
+                typeof(double),
+                typeof(IndicatorView),
+                defaultValue: 4d);
+
+        public double IndicatorWidth
+        {
+            get => (double)GetValue(IndicatorWidthProperty);
+            set => SetValue(IndicatorWidthProperty, value);
+        }
+
+
+        public static readonly BindableProperty IndicatorHeightProperty =
+            BindableProperty.Create(
+                nameof(IndicatorHeight),
+                typeof(double),
+                typeof(IndicatorView),
+                defaultValue: 4d);
+
+        public double IndicatorHeight
+        {
+            get => (double)GetValue(IndicatorHeightProperty);
+            set => SetValue(IndicatorHeightProperty, value);
+        }
+
+
+
+        public static readonly BindableProperty SelectedIndicatorWidthProperty =
+            BindableProperty.Create(
+                nameof(SelectedIndicatorWidth),
+                typeof(double),
+                typeof(IndicatorView),
+                defaultValue: 8d);
+
+        public double SelectedIndicatorWidth
+        {
+            get => (double)GetValue(SelectedIndicatorWidthProperty);
+            set => SetValue(SelectedIndicatorWidthProperty, value);
+        }
+
+
+        public static readonly BindableProperty SelectedIndicatorHeightProperty =
+            BindableProperty.Create(
+                nameof(SelectedIndicatorHeight),
+                typeof(double),
+                typeof(IndicatorView),
+                defaultValue: 8d);
+
+        public double SelectedIndicatorHeight
+        {
+            get => (double)GetValue(SelectedIndicatorHeightProperty);
+            set => SetValue(SelectedIndicatorHeightProperty, value);
+        }
+
+
+        public static readonly BindableProperty SelectedIndicatorColorProperty =
+            BindableProperty.Create(
+                nameof(SelectedIndicatorColor),
+                typeof(Color),
+                typeof(IndicatorView),
+                defaultValue: Color.Default);
+
+        public Color SelectedIndicatorColor
+        {
+            get => (Color)GetValue(SelectedIndicatorColorProperty);
+            set => SetValue(SelectedIndicatorColorProperty, value);
+        }
+
+
+
+        public static readonly BindableProperty IndicatorShapeProperty =
+            BindableProperty.Create(
+                nameof(IndicatorShape),
+                typeof(IndicatorShape),
+                typeof(IndicatorView),
+                defaultValue: IndicatorShape.Circle);
+
+        public IndicatorShape IndicatorShape
+        {
+            get => (IndicatorShape)GetValue(IndicatorShapeProperty);
+            set => SetValue(IndicatorShapeProperty, value);
+        }
+
+
 
 
         private void CreateIndicators()
         {
             Children.Clear();
 
-            if (carouselView == null)
+            if (ItemsSource == null ||
+                !ItemsSource.Any())
             {
                 return;
             }
 
 
-            if (carouselView.ItemsSource == null)
-            {
-                return;
-            }
-
-
-            foreach (var item in carouselView.ItemsSource)
+            foreach (var item in ItemsSource)
             {
                 AddIndicator(item);
             }
@@ -73,12 +173,16 @@ namespace XamarinSnippets.Controls
         private void AddIndicator(
             object item)
         {
-            BoxView indicator = CreateDefaultIndicator();
+            BoxView indicator;
 
-            if (carouselView.CurrentItem == item ||
-                carouselView.Position == Children.Count)
+
+            if (SelectedItem == item)
             {
                 indicator = CreateSelectedIndicator();
+            }
+            else
+            {
+                indicator = CreateDefaultIndicator();
             }
 
 
@@ -87,16 +191,18 @@ namespace XamarinSnippets.Controls
 
         private BoxView CreateDefaultIndicator()
         {
-            var boxView = new BoxView
-            {
-                BackgroundColor = IndicatorColor,
-                HeightRequest = IndicatorSize,
-                WidthRequest = IndicatorSize
-            };
+            var boxView = CreateIndicator();
+            boxView.Color = IndicatorColor;
+
+            boxView.HeightRequest = IndicatorHeight;
+            boxView.WidthRequest =
+                IndicatorShape == IndicatorShape.Circle ?
+                    IndicatorHeight :
+                    IndicatorWidth;
 
             if (IndicatorShape == IndicatorShape.Circle)
             {
-                boxView.CornerRadius = IndicatorSize / 2;
+                boxView.CornerRadius = IndicatorHeight / 2;
             }
 
 
@@ -105,23 +211,35 @@ namespace XamarinSnippets.Controls
 
         private BoxView CreateSelectedIndicator()
         {
-            var boxView = new BoxView
-            {
-                BackgroundColor = SelectedIndicatorColor,
-                HeightRequest = SelectedIndicatorSize,
-                WidthRequest = SelectedIndicatorSize
-            };
+            var boxView = CreateIndicator();
+            boxView.Color = SelectedIndicatorColor;
+
+            boxView.HeightRequest = SelectedIndicatorHeight;
+            boxView.WidthRequest =
+                IndicatorShape == IndicatorShape.Circle ?
+                    SelectedIndicatorHeight :
+                    SelectedIndicatorWidth;
 
             if (IndicatorShape == IndicatorShape.Circle)
             {
-                boxView.CornerRadius = SelectedIndicatorSize / 2;
+                boxView.CornerRadius = SelectedIndicatorHeight / 2;
             }
 
 
             return boxView;
         }
 
-        private void SelectIndicator(BoxView indicator)
+        private BoxView CreateIndicator()
+        {
+            return new BoxView
+            {
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center
+            };
+        }
+
+        private void SelectIndicator(
+            BoxView indicator)
         {
             if (indicator == null)
             {
@@ -129,59 +247,133 @@ namespace XamarinSnippets.Controls
             }
 
 
-            indicator.BackgroundColor = SelectedIndicatorColor;
-
-            indicator.HeightRequest = SelectedIndicatorSize;
-            indicator.WidthRequest = SelectedIndicatorSize;
+            indicator.HeightRequest = SelectedIndicatorHeight;
+            indicator.WidthRequest =
+                IndicatorShape == IndicatorShape.Circle ?
+                    SelectedIndicatorHeight :
+                    SelectedIndicatorWidth;
 
             if (IndicatorShape == IndicatorShape.Circle)
             {
-                indicator.CornerRadius = SelectedIndicatorSize / 2;
+                indicator.CornerRadius = SelectedIndicatorHeight / 2;
             }
+
+
+            indicator.Color = SelectedIndicatorColor;
         }
 
-        private void DeselectIndicator(BoxView indicator)
+
+        private void DeselectIndicator(
+            BoxView indicator)
         {
             if (indicator == null)
             {
                 return;
             }
 
-            indicator.BackgroundColor = IndicatorColor;
 
-            indicator.HeightRequest = IndicatorSize;
-            indicator.WidthRequest = IndicatorSize;
+            indicator.HeightRequest = IndicatorHeight;
+            indicator.WidthRequest =
+                IndicatorShape == IndicatorShape.Circle ?
+                    IndicatorHeight :
+                    IndicatorWidth;
+
 
             if (IndicatorShape == IndicatorShape.Circle)
             {
-                indicator.CornerRadius = IndicatorSize / 2;
+                indicator.CornerRadius = IndicatorHeight / 2;
             }
+
+
+            indicator.Color = IndicatorColor;
+            //indicator.BackgroundColor = IndicatorColor;
         }
 
 
-        private void OnCarouselPropertyChanged(
+        private void OnItemsSourceCollectionChanged(
             object sender,
-            PropertyChangedEventArgs eventArgs)
+            NotifyCollectionChangedEventArgs eventArgs)
         {
-            if (eventArgs.PropertyName != nameof(CarouselView.ItemsSource))
-            {
-                return;
-            }
-
-
             CreateIndicators();
         }
 
-
-        private void OnCarouselPositionChanged(
-            object sender,
-            PositionChangedEventArgs eventArgs)
+        private void HandleSelectedItemChanged(
+            object previousSelected,
+            object selectedItem)
         {
-            var previousIndicator = Children.ElementAt(eventArgs.PreviousPosition) as BoxView;
-            var currentIndicator = Children.ElementAt(eventArgs.CurrentPosition) as BoxView;
+            if (ItemsSource == null)
+            {
+                return;
+            }
 
-            DeselectIndicator(previousIndicator);
-            SelectIndicator(currentIndicator);
+            if (previousSelected != null &&
+                ItemsSource.Contains(previousSelected))
+            {
+                int previousIndex = ItemsSource.IndexOf(
+                    previousSelected);
+
+                var previousIndicator = Children.ElementAt(
+                    previousIndex) as BoxView;
+
+                DeselectIndicator(previousIndicator);
+            }
+
+            if (selectedItem != null &&
+                ItemsSource.Contains(selectedItem))
+            {
+                int selectedIndex = ItemsSource.IndexOf(
+                    selectedItem);
+
+                var selectedIndicator = Children.ElementAt(
+                    selectedIndex) as BoxView;
+
+                SelectIndicator(selectedIndicator);
+            }
+
+
+            InvalidateLayout();
+        }
+
+
+
+        private static void OnItemsSourceChanged(
+            BindableObject bindable,
+            object oldValue,
+            object newValue)
+        {
+            if (!(bindable is IndicatorView indicatorView))
+            {
+                return;
+            }
+
+            if (oldValue is INotifyCollectionChanged oldObservableCollection)
+            {
+                oldObservableCollection.CollectionChanged -= indicatorView.OnItemsSourceCollectionChanged;
+            }
+
+            if (newValue is INotifyCollectionChanged observableCollection)
+            {
+                observableCollection.CollectionChanged += indicatorView.OnItemsSourceCollectionChanged;
+            }
+
+
+            indicatorView.CreateIndicators();
+        }
+
+        private static void OnSelectedItemChanged(
+            BindableObject bindable,
+            object oldValue,
+            object newValue)
+        {
+            if (!(bindable is IndicatorView indicatorView))
+            {
+                return;
+            }
+
+
+            indicatorView.HandleSelectedItemChanged(
+                oldValue,
+                newValue);
         }
     }
 }

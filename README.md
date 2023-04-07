@@ -19,17 +19,17 @@ The README.md file there will give you more information about the purpose and ho
 
 ## Available classes
 ### Helpers
-- [BehaviorBase](https://github.com/Pantheas/XamarinSnippets/tree/main/src/Helpers/BehaviorBase)
-- [DynamicTemplateSelector](https://github.com/Pantheas/XamarinSnippets/tree/main/src/Helpers/DynamicTemplateSelector)
-- [EnumerableExtensions](https://github.com/Pantheas/XamarinSnippets/tree/main/src/Helpers/EnumerableExtensions)
-- [EventToCommandBehavior](https://github.com/Pantheas/XamarinSnippets/tree/main/src/Helpers/EventToCommandBehavior)
-- [IconExtension](https://github.com/Pantheas/XamarinSnippets/tree/main/src/Helpers/IconExtension)
-- [PopupController](https://github.com/Pantheas/XamarinSnippets/tree/main/src/Helpers/PopupController)
-- [RapidTapPreventor](https://github.com/Pantheas/XamarinSnippets/tree/main/src/Helpers/RapidTapPreventor)
+- [BehaviorBase](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Helpers/BehaviorBase)
+- [DynamicTemplateSelector](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Helpers/DynamicTemplateSelector)
+- [EnumerableExtensions](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Helpers/EnumerableExtensions)
+- [EventToCommandBehavior](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Helpers/EventToCommandBehavior)
+- [IconExtension](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Helpers/IconExtension)
+- [PopupController](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Helpers/PopupController)
+- [RapidTapPreventor](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Helpers/RapidTapPreventor)
 
 ### Controls
-- [DynamicGrid](https://github.com/Pantheas/XamarinSnippets/tree/main/src/Controls/DynamicGrid)
-- [IndicatorView](https://github.com/Pantheas/XamarinSnippets/tree/main/src/Controls/IndicatorView)
-- [JumpMarkView](https://github.com/Pantheas/XamarinSnippets/tree/main/src/Controls/JumpMarkView)
-- [Link](https://github.com/Pantheas/XamarinSnippets/tree/main/src/Controls/Link)
-- [RepeaterView](https://github.com/Pantheas/XamarinSnippets/tree/main/src/Controls/RepeaterView)
+- [DynamicGrid](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Controls/DynamicGrid)
+- [IndicatorView](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Controls/IndicatorView)
+- [JumpMarkView](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Controls/JumpMarkView)
+- [Link](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Controls/Link)
+- [RepeaterView](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Controls/RepeaterView)

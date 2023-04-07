@@ -12,7 +12,7 @@ Collection of useful Xamarin snippets and controls
 
 ## 📝 Usage
 
-This repository contains both [general helper classes](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Helpers) and [controls](https://github.com/Pantheas/XamarinSnippets/tree/master/src/controls).
+This repository contains both [general helper classes](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Helpers) and [controls](https://github.com/Pantheas/XamarinSnippets/tree/master/src/Controls).
 To get more information about a certain class, just navigate into the folder.
 The README.md file there will give you more information about the purpose and how to use it.
  

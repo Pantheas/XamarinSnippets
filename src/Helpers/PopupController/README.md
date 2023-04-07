@@ -2,19 +2,19 @@ The `PopupController` helps you handling your popups when using [Rotorgames Popu
 You can register popups to a specific view model type and afterwards show or hide them from within any view model, allowing you to respect the rules of the MVVM pattern.
 <br /><br />
 The following methods are available:<br />
-- `Register<TViewModel, TPopup>()`
+- `Register<TViewModel, TPopup>()`<br />
 	ties a view model type to a popup page type
-- `ShowAsync<TViewModel>(bool animate = true)`
+- `ShowAsync<TViewModel>(bool animate = true)`<br />
 	shows the popup that is tied to the given view model type, if it is registered
-- `ShowAsync<TViewModel, TData>(bool animate = true)`
+- `ShowAsync<TViewModel, TData>(bool animate = true)`<br />
 	shows the popup that is tied to the given view model type and passes initialization data, if it is registered
-- `CloseAsync()`
+- `CloseAsync()`<br />
 	closes the current popup
-- `CloseAllAsync()`
+- `CloseAllAsync()`<br />
 	closes all popups
-- `RemoveAsync<TViewModel>(bool animate = true)`
+- `RemoveAsync<TViewModel>(bool animate = true)`<br />
 	removes the popup that is tied to the given view model type from the stack
 
 
-** NOTE: the `PopupController` has some dependencies to the MVVM framework [CodeMonkeys](https://github.com/UltimateCodeMonkeys/CodeMonkeys) **
+**NOTE:** the `PopupController` has some dependencies to the MVVM framework [CodeMonkeys](https://github.com/UltimateCodeMonkeys/CodeMonkeys)
 If you do not use the framework, you will have to do some adaptions in order to resolve your view model and page instances.

@@ -1,7 +1,7 @@
 <h1 align="center">Xamarin Snippets</h1><div align="center">
 
 [![forthebadge](https://forthebadge.com/images/badges/fuck-it-ship-it.svg)](https://forthebadge.com)
-[![forthebadge](https://forthebadge.com/images/badges/made-with-csharp.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/made-with-c-sharp.svg)](https://forthebadge.com)
 
 [![GitHub license](https://img.shields.io/github/license/Pantheas/XamarinSnippets.svg?longCache=true&style=flat-square)](https://github.com/Pantheas/XamarinSnippets/blob/main/LICENSE)
 

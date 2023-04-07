@@ -1,7 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
-
-using Xamarin.Forms;
+using System;
+using System.Threading.Tasks;
 
 namespace XamarinSnippets
 {
@@ -13,40 +11,67 @@ namespace XamarinSnippets
     /// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
     /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     /// </summary>
-    public class DynamicTemplateSelector :
-        DataTemplateSelector
+    public static class RapidTapPreventor
     {
-        public DataTemplate Fallback { get; set; }
+        private static readonly object syncLock = new object();
 
-        public List<Template> Templates { get; set; } = new List<Template>();
 
-        protected override DataTemplate OnSelectTemplate(
-            object item,
-            BindableObject container)
+        private static bool isExecutingFunction = false;
+
+
+
+        public static async Task TryExecuteAsync(
+            Func<Task> function)
         {
-            if (item == null)
+            lock (syncLock)
             {
-                return Fallback;
+                if (isExecutingFunction)
+                {
+                    return;
+                }
+
+
+                isExecutingFunction = true;
             }
 
-            var templateMap = Templates.FirstOrDefault(
-                template => template.ItemType.IsAssignableFrom(item.GetType()));
-
-            if (templateMap == null)
+            try
             {
-                return Fallback;
+                await function();
             }
-
-            return templateMap.DataTemplate;
+            finally
+            {
+                lock (syncLock)
+                {
+                    isExecutingFunction = false;
+                }
+            }
         }
-    }
+
+        public static void TryExecute(
+            Action function)
+        {
+            lock (syncLock)
+            {
+                if (isExecutingFunction)
+                {
+                    return;
+                }
 
 
-    // todo: move to separate file when using
-    public class Template
-    {
-        public Type ItemType { get; set; }
+                isExecutingFunction = true;
+            }
 
-        public DataTemplate DataTemplate { get; set; }
+            try
+            {
+                function();
+            }
+            finally
+            {
+                lock (syncLock)
+                {
+                    isExecutingFunction = false;
+                }
+            }
+        }
     }
 }
